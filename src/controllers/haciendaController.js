@@ -77,6 +77,15 @@ const actualizarHacienda = async (req,res)=>{
     }
 };
 
+//(HU 4)
+const contarHaciendas = async (req, res) => {
+    try {
+        const pool = await getConnection();
+        const result = await pool.request().query('SELECT COUNT(*) AS total FROM Haciendas');
+        res.json({ total: result.recordset[0].total });
+    } catch (error) {
+        res.status(500).json({ mensaje: 'Error al contar haciendas', error: error.message });
+    }
+};
 
-
-module.exports = {getHacinedas, crearHacienda, deleteHacienda, actualizarHacienda}
+module.exports = {getHacinedas, crearHacienda, deleteHacienda, actualizarHacienda, contarHaciendas}
