@@ -3,7 +3,7 @@ const router = express.Router();
 const {getHacinedas, crearHacienda, deleteHacienda, actualizarHacienda, contarHaciendas} = require('../controllers/haciendaController');
 
 //HTTP 
-router.get('/haciendas',contarHaciendas);
+router.get('/haciendas/contar',contarHaciendas);
 router.get('/haciendas', getHacinedas);
 router.post('/haciendas', crearHacienda);
 router.delete('/haciendas/:id',deleteHacienda);

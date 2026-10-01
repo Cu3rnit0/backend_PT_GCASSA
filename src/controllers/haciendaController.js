@@ -1,5 +1,26 @@
 const { getConnection, sql} = require ('../config/db');
 
+const validarHacienda = ({ nombre, ubicacion, estatus }) => {
+    const errores = [];
+
+    if (typeof nombre !== 'string' || !nombre.trim()) errores.push('El nombre es obligatorio');
+    else if (nombre.trim().length > 100) errores.push('El nombre no puede superar 100 caracteres');
+
+    if (typeof ubicacion !== 'string' || !ubicacion.trim()) errores.push('La ubicación es obligatoria');
+    else if (ubicacion.trim().length > 150) errores.push('La ubicación no puede superar 150 caracteres');
+
+    if (estatus !== undefined && typeof estatus !== 'boolean') {
+        errores.push('El estatus debe ser booleano (true = Activo, false = Inactivo)');
+    }
+
+    return errores;
+};
+
+const validarId = (valor) => {
+    const id = Number(valor);
+    return Number.isInteger(id) && id > 0 ? id : null;
+};
+
 //(GET)
 const getHacinedas = async (req, res) =>{
     try{
