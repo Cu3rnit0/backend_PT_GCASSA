@@ -12,6 +12,8 @@ app.use(express.json());
 
 getConnection();
 
+const haciendaRoutes = require('./routes/haciendaRoutes');
+app.use('/api', haciendaRoutes);
 
 app.get('/', (req, res) => {
     res.json({ mensaje: 'API de Grupo CASSA lista para recibir peticiones' });

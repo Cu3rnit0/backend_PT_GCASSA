@@ -5,9 +5,9 @@ const getHacinedas = async (req, res) =>{
     try{
         const pool = await getConnection();
         const result = await pool.request().query('select * from Haciendas');
-        res.json(result.recorset);
+        res.json(result.recordset);
     }catch(error){
-        res.status(500).json({mensaje:'Error al obtener las haciendas',error:error.mensaje});
+        res.status(500).json({mensaje:'Error al obtener las haciendas',error:error.message});
     }    
 };
 
@@ -15,19 +15,25 @@ const getHacinedas = async (req, res) =>{
 const crearHacienda = async (req, res) => {
     const { nombre, ubicacion, estatus } = req.body;
 
-    if(!nombre || !ubicacion){
-        return res.status(400).json({mensaje: 'Nombre y ubicacion son obligatorios'});
+    if (!nombre || !ubicacion) {
+        return res.status(400).json({
+            mensaje: 'Nombre y ubicación son obligatorios'
+        });
     }
-    try{
+
+    try {
         const pool = await getConnection();
+
         await pool.request()
-            .input('nombre',sql.NVarChar,nombre)
-            .input('ubicacion',sql.NVarChar,ubicacion)
-            .input('estatus',sql.Bit,estatus !==undefined ? estatus :1)
-            .input('insert into Haciendas (nombre,ubicacion,estatus)values(@nombre, @ubicacion, @estatus)');
-        res.estatus(201).json({mensaje:'Hacienda creada exitosamente'});
-    }catch(error){
-        res.status(500).json({mensaje: 'Error al crear la hacienda', error: error.mensaje});
+            .input('nombre', sql.NVarChar, nombre)
+            .input('ubicacion', sql.NVarChar, ubicacion)
+            .input('estatus',sql.Bit,estatus !== undefined ? estatus : 1)
+            .query(`INSERT INTO Haciendas(nombre, ubicacion, estatus)VALUES(@nombre, @ubicacion, @estatus)`);
+
+        res.status(201).json({mensaje: 'Hacienda creada exitosamente'});
+
+    } catch (error) {
+        res.status(500).json({mensaje: 'Error al crear la hacienda',error: error.message});
     }
 };
 
@@ -45,7 +51,7 @@ const deleteHacienda = async (req, res) =>{
         
         res.json({mensaje: 'Hacienda eliminada exitosamente'})
     }catch (error){
-        res.status(500).json({mensaje:'Error al eliminar', error: error.mensaje});
+        res.status(500).json({mensaje:'Error al eliminar', error: error.message});
     }
 };
 
